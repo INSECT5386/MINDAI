@@ -226,4 +226,4 @@ if __name__ == "__main__":
     window = ChatWindow()
     window.show()
     sys.exit(app.exec())
-
++ 모델 코드는 Seq2Seq.py, Transformer.py를 확인해 주세요
