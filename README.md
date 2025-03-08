@@ -34,5 +34,5 @@
 
 + 상업적 사용(돈을 벌기 위한 수단으로 사용)을 허가하지 않습니다. 개인 또는 단체의 비영리 사용만 허용합니다.
 
-'''bash
-pip install tensorflow
+```bash
+pip install torch transformers
