@@ -233,3 +233,5 @@ if __name__ == "__main__":
     window = ChatWindow()
     window.show()
     sys.exit(app.exec())
+```bash
+sss
