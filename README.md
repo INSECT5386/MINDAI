@@ -5,6 +5,7 @@
 + 앱은 exe 파일입니다. 다른 확장자로는 제작하지 않습니다.
 + 앱은 python 코드를 Pyinstaller를 이용해 exe로 빌드하였습니다.
 + 본 모델은 한국어 모델입니다.
++ 상업적 사용을 제외하면 뭐든 괜찮습니다. 얼마든지 사용해 주세요
 
 #### 모델 다운로드:                                                                                                   
 + [seq2seq_98000.h5](https://drive.google.com/file/d/13jwVJKOXsGiRwoMHI9dASlYEUsulsxs_/view?usp=drive_link)       
@@ -20,8 +21,6 @@
 #### 앱 다운로드:                                                                                                     
 
 
-
-+ 상업적 사용을 제외하면 뭐든 괜찮습니다. 얼마든지 사용해 주세요 
 
 ### 부탁과 밑밥
 
