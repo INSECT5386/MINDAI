@@ -50,6 +50,29 @@ import numpy as np
 import tensorflow as tf
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QScrollArea, QSlider, QComboBox
 from PySide6.QtCore import Qt
+import tensorflow as tf
+
+# Swish Activation 함수 커스텀 레이어
+class SwishActivation(tf.keras.layers.Layer):
+    def __init__(self):
+        super(SwishActivation, self).__init__()
+
+    def call(self, inputs):
+        return inputs * tf.keras.backend.sigmoid(inputs)
+
+# 커스텀 FeedForward 네트워크 레이어
+class CustomFeedForwardNetwork(tf.keras.layers.Layer):
+    def __init__(self, hidden_dim, dropout_rate):
+        super(CustomFeedForwardNetwork, self).__init__()
+        self.dense1 = tf.keras.layers.Dense(hidden_dim, activation='relu')
+        self.dropout = tf.keras.layers.Dropout(dropout_rate)
+        self.dense2 = tf.keras.layers.Dense(hidden_dim)
+
+    def call(self, inputs):
+        x = self.dense1(inputs)
+        x = self.dropout(x)
+        return self.dense2(x)
+
 
 # 인사 패턴 및 응답
 greetings = [r"\b안녕\b", r"\b안녕하세요\b", r"\b반가워\b", r"\b하이\b", r"\b잘 지내\b"]
@@ -58,19 +81,36 @@ greeting_responses = ["안녕하세요! 😊", "반갑습니다!", "안녕! 좋�
 name_questions = [r"\b이름이 뭐야\b", r"\b너 누구야\b", r"\b너의 이름은\b", r"\b너 뭐야\b"]
 name_responses = ["내 이름은 마음이야!", "난 챗봇 마음이야, 반가워!", "마음이라고 불러줘! 😊"]
 
-# 모델 및 토크나이저 불러오기
+import tensorflow as tf
+import pickle
+
 def load_model(model_name):
+    global tokenizer
+
     if model_name == "기본 모델":
         model = tf.keras.models.load_model("seq2seq_model_90000.h5")
+        with open(f"tokenizer.pkl", "rb") as f:
+            tokenizer = pickle.load(f)
     elif model_name == "고급 모델":
         model = tf.keras.models.load_model("seq2seq_model_98000.h5")
+        with open(f"tokenizer.pkl", "rb") as f:
+            tokenizer = pickle.load(f)
     elif model_name == "빠른 모델":
         model = tf.keras.models.load_model("seq2seq_model_50000.h5")
-    
-    with open(f"tokenizer.pkl", "rb") as f:
-        tokenizer = pickle.load(f)
+        with open(f"tokenizer.pkl", "rb") as f:
+            tokenizer = pickle.load(f)
+    elif model_name == "지니어스 모델":  # Transformer 모델
+        model = tf.keras.models.load_model('Transformer_model_with_custom_layer.h5', 
+                                  custom_objects={
+                                      'SwishActivation': SwishActivation,
+                                      'CustomFeedForwardNetwork': CustomFeedForwardNetwork
+                                  })
+        with open("Transformer_tokenizer.pkl", "rb") as f:
+            tokenizer = pickle.load(f)  # 이 부분은 Transformer 모델에 맞게 pickle을 저장해야 함
     
     return model, tokenizer
+
+
 
 # 초기 모델 설정 (기본 모델)
 model, tokenizer = load_model("기본 모델")
@@ -103,15 +143,18 @@ def is_greeting(text):
 def is_name_question(text):
     return any(re.search(pattern, text.lower()) for pattern in name_questions)
 
-# 챗봇 응답 함수
 def chatbot_response(user_input, temperature=0.7):
     if is_greeting(user_input):
         return random.choice(greeting_responses)
     elif is_name_question(user_input):
         return random.choice(name_responses)
-    return chat_with_model(user_input, temperature)
+    
+    # Seq2Seq 모델 사용
+    response = chat_with_model(user_input, temperature)  # 또는 generate_response_with_transformer
+    return response
 
-# 채팅 함수
+
+# Seq2Seq 모델을 사용한 채팅 응답 함수
 def chat_with_model(input_text, temperature):
     input_seq = tokenizer.texts_to_sequences([input_text])
     input_seq = tf.keras.preprocessing.sequence.pad_sequences(input_seq, maxlen=40, padding="post")
@@ -150,6 +193,19 @@ def chat_with_model(input_text, temperature):
 
     return decoded_sentence.strip()
 
+
+# Transformer 모델을 사용한 응답 생성 함수
+def generate_response_with_transformer(input_text, temperature):
+    input_seq = tokenizer.texts_to_sequences([input_text])
+    input_seq = tf.keras.preprocessing.sequence.pad_sequences(input_seq, maxlen=40, padding="post")
+    
+    # Transformer 모델 예측
+    output_seq = model.predict(input_seq)
+    output_seq = np.argmax(output_seq, axis=-1)  # 예측 결과 중 가장 높은 확률을 가진 토큰 선택
+
+    decoded_sentence = tokenizer.sequences_to_texts(output_seq)
+    return decoded_sentence[0].strip()
+
 # PySide6 GUI 클래스
 class ChatWindow(QWidget):
     def __init__(self):
@@ -163,6 +219,7 @@ class ChatWindow(QWidget):
         self.model_selector.addItem("기본 모델")
         self.model_selector.addItem("고급 모델")
         self.model_selector.addItem("빠른 모델")
+        self.model_selector.addItem("지니어스 모델")  # Transformer 모델 추가
         self.model_selector.currentTextChanged.connect(self.change_model)
         
         self.chat_area = QScrollArea(self)
@@ -233,5 +290,3 @@ if __name__ == "__main__":
     window = ChatWindow()
     window.show()
     sys.exit(app.exec())
-```bash
-sss
