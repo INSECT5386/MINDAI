@@ -49,39 +49,16 @@
 
 + 상업적 사용(돈을 벌기 위한 수단으로 사용)을 허가하지 않습니다. 개인 또는 단체의 비영리 사용만 허용합니다.
 ### 앱 코드
-```bash
 import sys
 import re
 import random
 import pickle
 import numpy as np
 import tensorflow as tf
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QLabel, QScrollArea, QSlider, QComboBox
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QTextEdit, QSlider, QComboBox, QLabel
 from PySide6.QtCore import Qt
-import tensorflow as tf
-
-# Swish Activation 함수 커스텀 레이어
-class SwishActivation(tf.keras.layers.Layer):
-    def __init__(self):
-        super(SwishActivation, self).__init__()
-
-    def call(self, inputs):
-        return inputs * tf.keras.backend.sigmoid(inputs)
-
-# 커스텀 FeedForward 네트워크 레이어
-class CustomFeedForwardNetwork(tf.keras.layers.Layer):
-    def __init__(self, hidden_dim, dropout_rate):
-        super(CustomFeedForwardNetwork, self).__init__()
-        self.dense1 = tf.keras.layers.Dense(hidden_dim, activation='relu')
-        self.dropout = tf.keras.layers.Dropout(dropout_rate)
-        self.dense2 = tf.keras.layers.Dense(hidden_dim)
-
-    def call(self, inputs):
-        x = self.dense1(inputs)
-        x = self.dropout(x)
-        return self.dense2(x)
-
-
+import os
+import webbrowser
 # 인사 패턴 및 응답
 greetings = [r"\b안녕\b", r"\b안녕하세요\b", r"\b반가워\b", r"\b하이\b", r"\b잘 지내\b"]
 greeting_responses = ["안녕하세요! 😊", "반갑습니다!", "안녕! 좋은 하루 보내!", "하이~ 뭐 도와줄까?"]
@@ -89,35 +66,36 @@ greeting_responses = ["안녕하세요! 😊", "반갑습니다!", "안녕! 좋�
 name_questions = [r"\b이름이 뭐야\b", r"\b너 누구야\b", r"\b너의 이름은\b", r"\b너 뭐야\b"]
 name_responses = ["내 이름은 마음이야!", "난 챗봇 마음이야, 반가워!", "마음이라고 불러줘! 😊"]
 
-import tensorflow as tf
-import pickle
+
 
 def load_model(model_name):
     global tokenizer
 
-    if model_name == "기본 모델":
-        model = tf.keras.models.load_model("seq2seq_model_90000.h5")
-        with open(f"tokenizer.pkl", "rb") as f:
-            tokenizer = pickle.load(f)
-    elif model_name == "고급 모델":
-        model = tf.keras.models.load_model("seq2seq_model_98000.h5")
-        with open(f"tokenizer.pkl", "rb") as f:
-            tokenizer = pickle.load(f)
-    elif model_name == "빠른 모델":
-        model = tf.keras.models.load_model("seq2seq_model_50000.h5")
-        with open(f"tokenizer.pkl", "rb") as f:
-            tokenizer = pickle.load(f)
-    elif model_name == "지니어스 모델":  # Transformer 모델
-        model = tf.keras.models.load_model('Transformer_model_with_custom_layer.h5', 
-                                  custom_objects={
-                                      'SwishActivation': SwishActivation,
-                                      'CustomFeedForwardNetwork': CustomFeedForwardNetwork
-                                  })
-        with open("Transformer_tokenizer.pkl", "rb") as f:
-            tokenizer = pickle.load(f)  # 이 부분은 Transformer 모델에 맞게 pickle을 저장해야 함
-    
-    return model, tokenizer
+    # PyInstaller에서 EXE가 실행될 때, 임시 경로를 사용합니다.
+    if hasattr(sys, '_MEIPASS'):
+        base_path = sys._MEIPASS  # EXE로 실행될 경우
+    else:
+        base_path = os.path.abspath('.')  # 개발 환경에서 실행될 경우
 
+    # 모델 파일 경로 설정
+    if model_name == "기본 모델":
+        model_path = os.path.join(base_path, "seq2seq_model_50000.h5")
+    elif model_name == "고급 모델":
+        model_path = os.path.join(base_path, "seq2seq_model_90000.h5")
+    elif model_name == "빠른 모델":
+        model_path = os.path.join(base_path, "seq2seq_model_98000.h5")
+    else:
+        raise ValueError("모델 이름이 올바르지 않습니다.")
+
+    # 모델 로드
+    model = tf.keras.models.load_model(model_path)
+
+    # 토크나이저 파일 경로 설정
+    tokenizer_path = os.path.join(base_path, "tokenizer.pkl")
+    with open(tokenizer_path, "rb") as f:
+        tokenizer = pickle.load(f)
+
+    return model, tokenizer
 
 
 # 초기 모델 설정 (기본 모델)
@@ -158,9 +136,8 @@ def chatbot_response(user_input, temperature=0.7):
         return random.choice(name_responses)
     
     # Seq2Seq 모델 사용
-    response = chat_with_model(user_input, temperature)  # 또는 generate_response_with_transformer
+    response = chat_with_model(user_input, temperature)  
     return response
-
 
 # Seq2Seq 모델을 사용한 채팅 응답 함수
 def chat_with_model(input_text, temperature):
@@ -201,25 +178,12 @@ def chat_with_model(input_text, temperature):
 
     return decoded_sentence.strip()
 
-
-# Transformer 모델을 사용한 응답 생성 함수
-def generate_response_with_transformer(input_text, temperature):
-    input_seq = tokenizer.texts_to_sequences([input_text])
-    input_seq = tf.keras.preprocessing.sequence.pad_sequences(input_seq, maxlen=40, padding="post")
-    
-    # Transformer 모델 예측
-    output_seq = model.predict(input_seq)
-    output_seq = np.argmax(output_seq, axis=-1)  # 예측 결과 중 가장 높은 확률을 가진 토큰 선택
-
-    decoded_sentence = tokenizer.sequences_to_texts(output_seq)
-    return decoded_sentence[0].strip()
-
 # PySide6 GUI 클래스
 class ChatWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Chatbot GUI")
-        self.setGeometry(100, 100, 400, 600)
+        self.setWindowTitle("Chatbot Shell")
+        self.setGeometry(100, 100, 600, 400)
         layout = QVBoxLayout()
 
         # 모델 선택 콤보박스
@@ -227,15 +191,12 @@ class ChatWindow(QWidget):
         self.model_selector.addItem("기본 모델")
         self.model_selector.addItem("고급 모델")
         self.model_selector.addItem("빠른 모델")
-        self.model_selector.addItem("지니어스 모델")  # Transformer 모델 추가
         self.model_selector.currentTextChanged.connect(self.change_model)
-        
-        self.chat_area = QScrollArea(self)
-        self.chat_widget = QWidget()
-        self.chat_layout = QVBoxLayout()
-        self.chat_widget.setLayout(self.chat_layout)
-        self.chat_area.setWidget(self.chat_widget)
-        self.chat_area.setWidgetResizable(True)
+
+        # 대화창 (QTextEdit 사용)
+        self.chat_area = QTextEdit(self)
+        self.chat_area.setReadOnly(True)
+        self.chat_area.setStyleSheet("background-color: #1e1e1e; color: white; padding: 10px; border-radius: 5px;")
 
         self.text_input = QLineEdit(self)
         self.text_input.setPlaceholderText("메시지를 입력하세요...")
@@ -262,20 +223,61 @@ class ChatWindow(QWidget):
         self.setLayout(layout)
         self.apply_dark_mode()
 
+        self.model_name = "기본 모델"
+        self.model, self.tokenizer = load_model(self.model_name)
+
+    def change_model(self, model_name):
+        global model, tokenizer
+        model, tokenizer = load_model(model_name)  # 모델과 토크나이저 로드
+        self.model_name = model_name  # 현재 모델 이름을 저장
+        self.display_message(f"모델이 '{model_name}'으로 변경되었습니다.\n", "bot")
+
+    
+
     def send_message(self):
         user_message = self.text_input.text().strip()
         if not user_message:
             return
 
-        self.display_message(f"You: {user_message}", "user")
+        if user_message.lower() == "clear":
+            self.chat_area.clear()  # 대화 내용 초기화
+            self.display_message("대화 내용이 초기화되었습니다.\n", "bot")
+            self.text_input.clear()
+            return
+    
+        if user_message.lower() in ["/?", "/help"]:
+            help_message = (
+                "사용법:\n"
+                "/? 또는 /help: 사용법을 표시합니다.\n"
+                "검색 [검색어]: 구글에서 검색합니다.\n"
+                "clear: 대화 내용 초기화\n"
+                "일반 메시지를 입력하면 챗봇과 대화할 수 있습니다."
+        )
+            self.display_message(help_message, "bot")
+            self.text_input.clear()
+            return
+
+        if "검색" in user_message:  # '검색'이 포함된 입력 처리
+            search_query = user_message.replace("검색", "").strip()  # '검색' 단어 제거하고 검색어 추출
+            if search_query:  # 검색어가 비어 있지 않으면
+                search_url = f"https://www.google.com/search?q={search_query}"
+                webbrowser.open(search_url)  # 구글에서 검색
+                self.display_message(f"구글에서 '{search_query}' 검색 중...\n", "bot")
+            else:
+                self.display_message("검색어를 입력해주세요.\n", "bot")
+            self.text_input.clear()
+            return
+
+        self.display_message(f"You: {user_message}\n", "user")
         response = chatbot_response(user_message, self.temperature_slider.value() / 100)
-        self.display_message(f"마음이: {response}", "bot")
+        self.display_message(f"마음이: {response}\n", "bot")
         self.text_input.clear()
 
+
+
+
     def display_message(self, message, sender):
-        label = QLabel(message, self)
-        label.setStyleSheet("color: white; background-color: #007BFF; padding: 5px; border-radius: 10px;" if sender == "bot" else "color: red; background-color: #f1f1f1; padding: 5px; border-radius: 10px;")
-        self.chat_layout.addWidget(label)
+        self.chat_area.append(message)
         self.chat_area.verticalScrollBar().setValue(self.chat_area.verticalScrollBar().maximum())
 
     def update_temperature(self):
