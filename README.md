@@ -182,48 +182,5 @@ class ChatWindow(QWidget):
         layout.addWidget(QLabel("모델 선택:"))
         layout.addWidget(self.model_selector)
         layout.addWidget(self.temperature_label)
-        layout.addWidget(self.temperature_slider)
-        layout.addWidget(self.chat_area)
-        layout.addWidget(self.text_input)
-        layout.addWidget(self.send_button)
-
-        self.setLayout(layout)
-        self.apply_dark_mode()
-
-    def send_message(self):
-        user_message = self.text_input.text().strip()
-        if not user_message:
-            return
-
-        self.display_message(f"You: {user_message}", "user")
-        response = chatbot_response(user_message, self.temperature_slider.value() / 100)
-        self.display_message(f"마음이: {response}", "bot")
-        self.text_input.clear()
-
-    def display_message(self, message, sender):
-        label = QLabel(message, self)
-        label.setStyleSheet("color: white; background-color: #007BFF; padding: 5px; border-radius: 10px;" if sender == "bot" else "color: red; background-color: #f1f1f1; padding: 5px; border-radius: 10px;")
-        self.chat_layout.addWidget(label)
-        self.chat_area.verticalScrollBar().setValue(self.chat_area.verticalScrollBar().maximum())
-
-    def update_temperature(self):
-        temp = self.temperature_slider.value() / 100
-        self.temperature_label.setText(f"Temperature: {temp:.2f}")
-
-    def change_model(self, model_name):
-        global model, tokenizer
-        model, tokenizer = load_model(model_name)
-
-    def apply_dark_mode(self):
-        self.setStyleSheet("""
-            QWidget { background-color: #2b2b2b; color: white; }
-            QLineEdit, QPushButton { background-color: #444444; color: white; border: 1px solid #888888; }
-            QLabel { color: white; }
-        """)
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = ChatWindow()
-    window.show()
-    sys.exit(app.exec())
+        layout.addWid고
 + 모델 코드는 Seq2Seq.py, Transformer.py를 확인해 주세요
