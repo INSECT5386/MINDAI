@@ -7,6 +7,7 @@ LICENSE를 꼭 읽어 주세요.
 + 백도어/바이러스 등의 악성코드 또는 시스템이 발견되거나 이로인해 피해를 입었다면 사진과 함께 상황을 설명해주세요.
 + 앱은 exe 파일입니다. 다른 확장자로는 제작하지 않습니다.
 + 앱은 python 코드를 Pyinstaller를 이용해 exe로 빌드하였습니다.
++ 본 모델은 한국어 모델입니다.
 
 모델 다운로드:                                                                                                   
 [seq2seq_98000.h5](https://drive.google.com/file/d/13jwVJKOXsGiRwoMHI9dASlYEUsulsxs_/view?usp=drive_link)       
