@@ -13,7 +13,7 @@
 [Transformer_model_10000.h5](https://drive.google.com/file/d/1befy6rcPYrYmz29tjaV8uk_fTFm-Pm7N/view?usp=drive_link)
 
 #### 토크나이저 다운로드:                                                                                        
-[Seq2Seq_tokenizer](https://drive.google.com/file/d/1n5vWALf3qYSynzdLu5RtAgZEj9RnaCB8/view?usp=drive_link)  [Transformer_tokenizer](https://drive.google.com/file/d/1e-nNJjgAwC4HSFPEw8JCjsLviaGPgvcG/view?usp=drive_link)        
+[Seq2Seq_tokenizer](https://drive.google.com/file/d/1n5vWALf3qYSynzdLu5RtAgZEj9RnaCB8/view?usp=drive_link)   [Transformer_tokenizer](https://drive.google.com/file/d/1e-nNJjgAwC4HSFPEw8JCjsLviaGPgvcG/view?usp=drive_link)        
 
 #### 앱 다운로드:                                                                                                     
 
