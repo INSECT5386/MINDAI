@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPu
 from PySide6.QtCore import Qt
 import os
 import webbrowser
-# 인사 패턴 및 응답
+
 greetings = [r"\b안녕\b", r"\b안녕하세요\b", r"\b반가워\b", r"\b하이\b", r"\b잘 지내\b"]
 greeting_responses = ["안녕하세요! 😊", "반갑습니다!", "안녕! 좋은 하루 보내!", "하이~ 뭐 도와줄까?"]
 
@@ -20,13 +20,13 @@ name_responses = ["내 이름은 마음이야!", "난 챗봇 마음이야, 반�
 def load_model(model_name):
     global tokenizer
 
-    # PyInstaller에서 EXE가 실행될 때, 임시 경로를 사용합니다.
+   
     if hasattr(sys, '_MEIPASS'):
-        base_path = sys._MEIPASS  # EXE로 실행될 경우
+        base_path = sys._MEIPASS  
     else:
-        base_path = os.path.abspath('.')  # 개발 환경에서 실행될 경우
+        base_path = os.path.abspath('.')  
 
-    # 모델 파일 경로 설정
+    
     if model_name == "기본 모델":
         model_path = os.path.join(base_path, "seq2seq_model_50000.h5")
     elif model_name == "고급 모델":
@@ -36,10 +36,10 @@ def load_model(model_name):
     else:
         raise ValueError("모델 이름이 올바르지 않습니다.")
 
-    # 모델 로드
+    
     model = tf.keras.models.load_model(model_path)
 
-    # 토크나이저 파일 경로 설정
+   
     tokenizer_path = os.path.join(base_path, "tokenizer.pkl")
     with open(tokenizer_path, "rb") as f:
         tokenizer = pickle.load(f)
@@ -47,20 +47,20 @@ def load_model(model_name):
     return model, tokenizer
 
 
-# 초기 모델 설정 (기본 모델)
+
 model, tokenizer = load_model("기본 모델")
 
 start_token = "<start>"
 end_token = "<end>"
 
-# 인코더 모델 생성
+
 encoder_inputs = model.input[0]
 encoder_embedding = model.layers[2]
 encoder_gru = model.layers[4]
 encoder_outputs, state_h = encoder_gru(encoder_embedding(encoder_inputs))
 encoder_model = tf.keras.Model(encoder_inputs, [encoder_outputs, state_h])
 
-# 디코더 모델 생성
+
 decoder_inputs = model.input[1]
 decoder_embedding = model.layers[3]
 decoder_state_input_h = tf.keras.Input(shape=(136,))
@@ -71,7 +71,7 @@ decoder_dense = model.layers[6]
 decoder_outputs = decoder_dense(decoder_outputs)
 decoder_model = tf.keras.Model([decoder_inputs, decoder_state_input_h], [decoder_outputs, decoder_state_h])
 
-# 인사 체크 함수
+
 def is_greeting(text):
     return any(re.search(pattern, text.lower()) for pattern in greetings)
 
@@ -84,11 +84,11 @@ def chatbot_response(user_input, temperature=0.7):
     elif is_name_question(user_input):
         return random.choice(name_responses)
     
-    # Seq2Seq 모델 사용
+    
     response = chat_with_model(user_input, temperature)  
     return response
 
-# Seq2Seq 모델을 사용한 채팅 응답 함수
+
 def chat_with_model(input_text, temperature):
     input_seq = tokenizer.texts_to_sequences([input_text])
     input_seq = tf.keras.preprocessing.sequence.pad_sequences(input_seq, maxlen=40, padding="post")
@@ -127,7 +127,7 @@ def chat_with_model(input_text, temperature):
 
     return decoded_sentence.strip()
 
-# PySide6 GUI 클래스
+
 class ChatWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -135,14 +135,14 @@ class ChatWindow(QWidget):
         self.setGeometry(100, 100, 600, 400)
         layout = QVBoxLayout()
 
-        # 모델 선택 콤보박스
+        
         self.model_selector = QComboBox(self)
         self.model_selector.addItem("기본 모델")
         self.model_selector.addItem("고급 모델")
         self.model_selector.addItem("빠른 모델")
         self.model_selector.currentTextChanged.connect(self.change_model)
 
-        # 대화창 (QTextEdit 사용)
+       
         self.chat_area = QTextEdit(self)
         self.chat_area.setReadOnly(True)
         self.chat_area.setStyleSheet("background-color: #1e1e1e; color: white; padding: 10px; border-radius: 5px;")
@@ -177,8 +177,8 @@ class ChatWindow(QWidget):
 
     def change_model(self, model_name):
         global model, tokenizer
-        model, tokenizer = load_model(model_name)  # 모델과 토크나이저 로드
-        self.model_name = model_name  # 현재 모델 이름을 저장
+        model, tokenizer = load_model(model_name) 
+        self.model_name = model_name  
         self.display_message(f"모델이 '{model_name}'으로 변경되었습니다.\n", "bot")
 
     
@@ -189,7 +189,7 @@ class ChatWindow(QWidget):
             return
 
         if user_message.lower() == "clear":
-            self.chat_area.clear()  # 대화 내용 초기화
+            self.chat_area.clear() 
             self.display_message("대화 내용이 초기화되었습니다.\n", "bot")
             self.text_input.clear()
             return
@@ -206,11 +206,11 @@ class ChatWindow(QWidget):
             self.text_input.clear()
             return
 
-        if "검색" in user_message:  # '검색'이 포함된 입력 처리
-            search_query = user_message.replace("검색", "").strip()  # '검색' 단어 제거하고 검색어 추출
-            if search_query:  # 검색어가 비어 있지 않으면
+        if "검색" in user_message: 
+            search_query = user_message.replace("검색", "").strip() 
+            if search_query:  
                 search_url = f"https://www.google.com/search?q={search_query}"
-                webbrowser.open(search_url)  # 구글에서 검색
+                webbrowser.open(search_url)  
                 self.display_message(f"구글에서 '{search_query}' 검색 중...\n", "bot")
             else:
                 self.display_message("검색어를 입력해주세요.\n", "bot")
