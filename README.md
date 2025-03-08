@@ -12,8 +12,8 @@
 [seq2seq_50000.h5](https://drive.google.com/file/d/19tm0EH82sRCQQUbho6bLicw80kc1TI0s/view?usp=drive_link) 
 
 토크나이저 다운로드:                                                                                        
+[Seq2Seq_tokenizer](https://drive.google.com/file/d/1n5vWALf3qYSynzdLu5RtAgZEj9RnaCB8/view?usp=drive_link)        
 
-[Seq2Seq_tokenizer](https://drive.google.com/file/d/1n5vWALf3qYSynzdLu5RtAgZEj9RnaCB8/view?usp=drive_link)                
 앱 다운로드:                                                                                                     
 
 
