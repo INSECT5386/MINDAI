@@ -7,15 +7,15 @@
 + 본 모델은 한국어 모델입니다.
 
 #### 모델 다운로드:                                                                                                   
-[seq2seq_98000.h5](https://drive.google.com/file/d/13jwVJKOXsGiRwoMHI9dASlYEUsulsxs_/view?usp=drive_link)       
-[seq2seq_90000.h5](https://drive.google.com/file/d/1eCgpFWnyJSX-JgShrnCTm4-LDit_cB0T/view?usp=drive_link)       
-[seq2seq_50000.h5](https://drive.google.com/file/d/19tm0EH82sRCQQUbho6bLicw80kc1TI0s/view?usp=drive_link)    
-[Transformer_model_10000.h5](https://drive.google.com/file/d/1befy6rcPYrYmz29tjaV8uk_fTFm-Pm7N/view?usp=drive_link)
++ [seq2seq_98000.h5](https://drive.google.com/file/d/13jwVJKOXsGiRwoMHI9dASlYEUsulsxs_/view?usp=drive_link)       
++ [seq2seq_90000.h5](https://drive.google.com/file/d/1eCgpFWnyJSX-JgShrnCTm4-LDit_cB0T/view?usp=drive_link)       
++ [seq2seq_50000.h5](https://drive.google.com/file/d/19tm0EH82sRCQQUbho6bLicw80kc1TI0s/view?usp=drive_link)    
++ [Transformer_model_10000.h5](https://drive.google.com/file/d/1befy6rcPYrYmz29tjaV8uk_fTFm-Pm7N/view?usp=drive_link)
 
 #### 토크나이저 다운로드:                                                                                        
-[Seq2Seq_tokenizer](https://drive.google.com/file/d/1n5vWALf3qYSynzdLu5RtAgZEj9RnaCB8/view?usp=drive_link) 
++ [Seq2Seq_tokenizer](https://drive.google.com/file/d/1n5vWALf3qYSynzdLu5RtAgZEj9RnaCB8/view?usp=drive_link) 
 
-[Transformer_tokenizer](https://drive.google.com/file/d/1e-nNJjgAwC4HSFPEw8JCjsLviaGPgvcG/view?usp=drive_link)        
++ [Transformer_tokenizer](https://drive.google.com/file/d/1e-nNJjgAwC4HSFPEw8JCjsLviaGPgvcG/view?usp=drive_link)        
 
 #### 앱 다운로드:                                                                                                     
 
