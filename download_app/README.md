@@ -1,3 +1,4 @@
+```bash
 import sys
 import re
 import random
