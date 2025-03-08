@@ -10,8 +10,7 @@
 [seq2seq_98000.h5](https://drive.google.com/file/d/13jwVJKOXsGiRwoMHI9dASlYEUsulsxs_/view?usp=drive_link)       
 [seq2seq_90000.h5](https://drive.google.com/file/d/1eCgpFWnyJSX-JgShrnCTm4-LDit_cB0T/view?usp=drive_link)       
 [seq2seq_50000.h5](https://drive.google.com/file/d/19tm0EH82sRCQQUbho6bLicw80kc1TI0s/view?usp=drive_link) 
-
-[Seq2Seq_tokenizer](https://raw.githubusercontent.com/INSECT5386/AI/tokenizer/tokenizer.pkl)
+[Seq2Seq_tokenizer](https://raw.githubusercontent.com/insect5386/AI/tokenizer/tokenizer.pkl)                
 앱 다운로드:                                                                                                     
 
 
