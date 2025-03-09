@@ -28,6 +28,9 @@
 + [chatbot.exe](https://drive.google.com/file/d/1fGI930DgbXsUdHknrO-PXlEwHshUvIq8/view?usp=drive_link)
 + [다중 모델 버전.exe](https://drive.google.com/file/d/1uVcMQKv21mrbtREOqQ7ELD-2Yh-gxdSk/view?usp=drive_link)
 
+#### Hugging face 저장소
++ [Hugging Face 저장소](https://huggingface.co/Yuchan5386/MINDAI)
+
 ### 부탁과 밑밥
 
 + 독학으로 만든 첫 모델들이라 성능이 낮을 수 있어요.
