@@ -1,2 +1,1 @@
-'\'\'\
-print("buler")
+pyinstaller chatbot.spec
