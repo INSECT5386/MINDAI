@@ -30,7 +30,7 @@
 + [Seq2Seq_tokenizer](https://drive.google.com/file/d/1n5vWALf3qYSynzdLu5RtAgZEj9RnaCB8/view?usp=drive_link)  
 
 #### 앱 다운로드:                              
-+ [최신 버전](https://drive.google.com/file/d/1KvMYR3BXtmN7g-WXdcOjp-jVNARcb76T/view?usp=drive_link)
++ [최신 버전](https://drive.google.com/file/d/1m4PPUO05-N1fPiwVjnXsOXIncSqr7Xg6/view?usp=sharing)
 
 #### Hugging face 저장소
 + [Hugging Face 저장소](https://huggingface.co/Yuchan5386/MINDAI)
