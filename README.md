@@ -2,7 +2,7 @@
 
 ### 1. EXE 버전 사용하기
 1. [이 링크](
-https://drive.google.com/file/d/1m4PPUO05-N1fPiwVjnXsOXIncSqr7Xg6/view?usp=drive_link)를 통해 EXE 파일을 다운로드하세요.
+https://drive.google.com/file/d/1abzJhi0TMh7ZUwP28FHmH5RS1vqNntQR/view?usp=sharing)를 통해 EXE 파일을 다운로드하세요.
 2. 다운로드한 EXE 파일을 실행하여, 모델을 즉시 사용할 수 있습니다.
 
 ## 실행화면
